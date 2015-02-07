@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--
+    * Author:         BeiYuu
+    -->
+    <meta charset="utf-8" />
+    <title>libevent 多线程Http服务器 | 林 | blog</title>
+    <meta name="author" content="LinChaohui" />
+    <meta name="description" content="LinChaohui's Blog" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="/css/default.css" type="text/css" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/atom.xml" />
+    <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+</head>
+<body>
+
+    <div class="home-menu">
+        <div class="home-icon-con">
+            <a class="home-menu-icon" href="/">LinChaohui</a>
+            <a class="home-follow" href="#" title="Contact Me">+</a>
+        </div>
+        <div class="home-contact" background-color:#212121>
+            <a href="http://weibo.com/linchaohui/" target="_blank" style="margin-left:-5px;"><img src="http://www.weibo.com/favicon.ico" alt="" width="25"/></a>
+            <a href="https://gist.github.com/chaohui0/" target="_blank" style="text-align:center;"><img src="https://www.github.com/favicon.ico" alt="" width="25"/></a>
+            <a href="mailto:chaohui0@gmail.com" target="_blank" style="text-align:right"><img src="https://mail.google.com/favicon.ico" alt="" width="25"/></a>
+        </div>
+    </div>
+
+    <div id="content">
+    <link rel="stylesheet" href="/js/prettify/prettify.css" />
+
+
+<div class="entry">
+    <h1 class="entry-title"><a href="/libevent" title="libevent 多线程Http服务器">libevent 多线程Http服务器</a></h1>
+    <p class="entry-date">2013-08-29</p>
+    <h1>include &lt;event.h></h1>
+
+<pre><code>#include &lt;evhttp.h&gt;
+#include &lt;pthread.h&gt;
+#include &lt;errno.h&gt;
+#include &lt;string.h&gt;
+#include &lt;fcntl.h&gt;
+#include &lt;sys/socket.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;netinet/in.h&gt;
+#include &lt;iostream&gt;
+#include &lt;ctime&gt;
+#include&lt;fstream&gt;
+
+using namespace std;
+
+#define PORT 2500
+
+
+////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////http request handle process////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+void http_handler(struct evhttp_request *req)
+{
+    struct evbuffer *buf;
+    buf = evbuffer_new();
+
+
+    struct evkeyvalq * postHead = req-&gt;input_headers;
+
+    const char *http_cId = evhttp_find_header(postHead, "contourType"); //解析head，根据key获取value
+
+    /////////////////分析POST报文body信息/////////////////////
+    int buffer_data_len;
+    buffer_data_len = EVBUFFER_LENGTH(req-&gt;input_buffer);
+    //printf("%d\n\n",buffer_data_len);
+    /////////////////////////获得body信息/////////////////////////////////////////
+
+    if(buffer_data_len == 0)
+    {
+        evhttp_add_header(req-&gt;output_headers,"error_status","no picture!");
+        evbuffer_add_printf(buf,"no picture! please check your input");
+        /////////////////////////////////////////////////////////////////////////////////
+        //返回code 400
+        evhttp_send_reply(req, 400, "Error", buf);
+        //释放内存
+        evbuffer_free(buf);
+        return;
+
+    }
+
+    unsigned char *buffer_data = (unsigned char *)malloc(buffer_data_len+1);
+    memset(buffer_data, '\0', buffer_data_len+1);
+
+    memcpy (buffer_data, EVBUFFER_DATA(req-&gt;input_buffer), buffer_data_len);
+
+    //cout&lt;&lt;"pic:"&lt;&lt;endl&lt;&lt;buffer_data&lt;&lt;endl;
+
+    string resultURL = "thank you";
+    cout&lt;&lt;"query end"&lt;&lt;endl;
+    evbuffer_add_printf(buf, resultURL.c_str());
+    evhttp_send_reply(req, HTTP_OK, "OK", buf);
+
+    cout&lt;&lt;"search end"&lt;&lt;endl;
+    // 输出
+    evhttp_clear_headers(postHead);
+    free(buffer_data);
+    evbuffer_free(buf);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////libevent//////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+namespace servers {
+    namespace util {
+
+        class HTTPServer {
+        public:
+            HTTPServer() {}
+            ~HTTPServer() {}
+            int serv(int port, int nthreads);
+        protected:
+            static void* Dispatch(void *arg);
+            static void GenericHandler(struct evhttp_request *req, void *arg);
+            void ProcessRequest(struct evhttp_request *request);
+            int BindSocket(int port);
+        };
+
+        int HTTPServer::BindSocket(int port) {
+            int r;
+            int nfd;
+            nfd = socket(AF_INET, SOCK_STREAM, 0);
+            if (nfd &lt; 0) return -1;
+
+            int one = 1;
+            r = setsockopt(nfd, SOL_SOCKET, SO_REUSEADDR, (char *)&amp;one, sizeof(int));
+
+            struct sockaddr_in addr;
+            memset(&amp;addr, 0, sizeof(addr));
+            addr.sin_family = AF_INET;
+            addr.sin_addr.s_addr = INADDR_ANY;
+            addr.sin_port = htons(port);
+
+            r = bind(nfd, (struct sockaddr*)&amp;addr, sizeof(addr));
+            if (r &lt; 0) return -1;
+            r = listen(nfd, 10240);
+            if (r &lt; 0) return -1;
+
+            int flags;
+            if ((flags = fcntl(nfd, F_GETFL, 0)) &lt; 0
+                || fcntl(nfd, F_SETFL, flags | O_NONBLOCK) &lt; 0)
+                return -1;
+
+            return nfd;
+        }
+
+        int HTTPServer::serv(int port, int nthreads) {
+            int r;
+            int nfd = BindSocket(port);
+            if (nfd &lt; 0) return -1;
+            pthread_t ths[nthreads];
+            for (int i = 0; i &lt; nthreads; i++) {
+                struct event_base *base = event_init();
+                if (base == NULL) return -1;
+                struct evhttp *httpd = evhttp_new(base);
+                if (httpd == NULL) return -1;
+                r = evhttp_accept_socket(httpd, nfd);
+                if (r != 0) return -1;
+
+                int timeout = 60;
+                evhttp_set_timeout(httpd, timeout);
+                evhttp_set_gencb(httpd, HTTPServer::GenericHandler, this);
+                r = pthread_create(&amp;ths[i], NULL, HTTPServer::Dispatch, base);
+                if (r != 0) return -1;
+            }
+            for (int i = 0; i &lt; nthreads; i++) {
+                pthread_join(ths[i], NULL);
+            }
+        }
+
+        void* HTTPServer::Dispatch(void *arg) {
+            event_base_dispatch((struct event_base*)arg);
+            return NULL;
+        }
+
+        void HTTPServer::GenericHandler(struct evhttp_request *req, void *arg) {
+            ((HTTPServer*)arg)-&gt;ProcessRequest(req);
+        }
+
+        void HTTPServer::ProcessRequest(struct evhttp_request *req) {
+            http_handler(req);
+        }
+
+    }
+}
+
+int main(int argv,char*argc[]){
+
+    servers::util::HTTPServer s;
+    s.serv(PORT, 10);
+}
+</code></pre>
+
+<p>用了很久了，一直很强大，由于是同步处理方式，适当调整线程个数可加强性能</p>
+
+</div>
+
+<div id="disqus_container">
+    <div style="margin-bottom:20px" class="right">
+        <script type="text/javascript" charset="utf-8">
+        (function(){
+          var _w = 86 , _h = 16;
+          var param = {
+            url:location.href,
+            type:'6',
+            count:'', /**是否显示分享数，1显示(可选)*/
+            appkey:'', /**您申请的应用appkey,显示分享来源(可选)*/
+            title:'', /**分享的文字内容(可选，默认为所在页面的title)*/
+            pic:'', /**分享图片的路径(可选)*/
+            ralateUid:'1865415451', /**关联用户的UID，分享微博会@该用户(可选)*/
+            language:'zh_cn', /**设置语言，zh_cn|zh_tw(可选)*/
+            rnd:new Date().valueOf()
+          }
+          var temp = [];
+          for( var p in param ){
+            temp.push(p + '=' + encodeURIComponent( param[p] || '' ) )
+          }
+          document.write('<iframe allowTransparency="true" frameborder="0" scrolling="no" src="http://hits.sinajs.cn/A1/weiboshare.html?' + temp.join('&') + '" width="'+ _w+'" height="'+_h+'"></iframe>')
+        })()
+        </script>
+    </div>
+    <a href="#" class="comment" onclick="return false;">点击查看评论</a>
+ 	<div id="disqus_thread"></div>
+
+
+</div>
+
+<!--<iframe width="100%" height="75" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=75&fansRow=2&ptype=1&speed=0&skin=5&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1855270953&verifier=375b89d6&dpc=1"></iframe>-->
+
+
+<script src="/js/post.js" type="text/javascript"></script>
+
+</div>
+
+
+    <!--*********************************************************-->
+    <!--****** 宝贝儿，看见这个时候，删掉下面的统计代码哦~ ******-->
+    <!--************* 再推荐下我的第一篇博客哦~~ ****************-->
+    <!--*********************************************************-->
+
+
+    <script type="text/javascript">
+        $(function(){
+            $('.home-follow').click(function(e){
+                e.preventDefault();
+
+                if($('.home-contact').is(':visible')){
+                    $('.home-contact').slideUp(100);
+                }else{
+                    $('.home-contact').slideDown(100);
+                }
+            });
+        })
+    </script>
+</body>
+</html>
+
+</body>
+</html>

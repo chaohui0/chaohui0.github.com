@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--
+    * Author:         BeiYuu
+    -->
+    <meta charset="utf-8" />
+    <title>Machine Learning 学习笔记 | 林 | blog</title>
+    <meta name="author" content="LinChaohui" />
+    <meta name="description" content="LinChaohui's Blog" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="/css/default.css" type="text/css" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/atom.xml" />
+    <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+</head>
+<body>
+
+    <div class="home-menu">
+        <div class="home-icon-con">
+            <a class="home-menu-icon" href="/">LinChaohui</a>
+            <a class="home-follow" href="#" title="Contact Me">+</a>
+        </div>
+        <div class="home-contact" background-color:#212121>
+            <a href="http://weibo.com/linchaohui/" target="_blank" style="margin-left:-5px;"><img src="http://www.weibo.com/favicon.ico" alt="" width="25"/></a>
+            <a href="https://gist.github.com/chaohui0/" target="_blank" style="text-align:center;"><img src="https://www.github.com/favicon.ico" alt="" width="25"/></a>
+            <a href="mailto:chaohui0@gmail.com" target="_blank" style="text-align:right"><img src="https://mail.google.com/favicon.ico" alt="" width="25"/></a>
+        </div>
+    </div>
+
+    <div id="content">
+    <link rel="stylesheet" href="/js/prettify/prettify.css" />
+
+
+<div class="entry">
+    <h1 class="entry-title"><a href="/ML-Note" title="Machine Learning 学习笔记">Machine Learning 学习笔记</a></h1>
+    <p class="entry-date">2013-11-01</p>
+    <h2>Introduce</h2>
+
+<p>森森的觉得，应该花点时间好好学习下基础知识，所以开始认真的学习Ng大神的视频教程。</p>
+
+<p>链接地址：https://class.coursera.org/ml-004/lecture/index</p>
+
+<p>感觉比那个网易公开课的课堂录制视频要简单，还有各种字幕，题目，目标就是一天至少一课吧。</p>
+
+<h3>Supervised Learning</h3>
+
+<p>监督学习，即数据集中的每个数据都有相应的正确答案，算法基于这些做出预测</p>
+
+<p>主要有分类问题和回归问题</p>
+
+<p>分类问题就是0-1离散分类</p>
+
+<p>回归问题就是通过回归来预测一个连续值的输出（发现需要补下回归分析，最小二乘法这些大学数学的东西了）</p>
+
+<h3>Unsupervised Learning</h3>
+
+<p>无监督学习，与上述的分类问题不同的是，分类问题告诉你很多数据集的结果（比如某种肿瘤大小是否是癌症），而无监督学习的数据集是没有结果的，所以这其实是一个聚类问题,你需要根据数据集获得多个聚类（比如google的新闻聚类，将不同网站的同一条新闻聚合）。</p>
+
+<p>在鸡尾酒会问题上，在多个人同时说话中单独分离出每个人的声音，对，解决这个问题只需要使用一行代码!!介绍了下Octave软件（比matlab还牛逼？）,使用这个建模，然后用c++实现，这样能极大的加快效率（好吧，看来后面还要写一篇octave的入门心得）</p>
+
+<p>（第一课就这样愉快的结束了）</p>
+
+<h3>linear regression</h3>
+
+<p>主要讲了cost function，这个其实比较简单，就是误差的平方和除以2m，应该是为了求导的方便吧。</p>
+
+<p>有了cost function，然后讲了下在一个theta参数下是个抛物线，两个theta就是bowl-shape的东东，这样就很自然的引出了等高线(contour figures)的概念。</p>
+
+<p>有了等高线的概念，然后就是介绍传说中的梯度下降（gradient descent)了。</p>
+
+<p>梯度下降中要注意的一点是多参数更新的计算顺序问题，计算每个参数的下一个步长值，要先把所有偏导先算出来，然后计算并赋给新参数，切忌算出一个新参数，再用新参数求另一个参数的偏导。</p>
+
+<p>还有一个新手误区，关于步长的问题</p>
+
+<p>θ:=θ-α·dJ(θ)/dθ
+（关于这个公式的由来，个人觉得dJ(θ)/dθ是比较容易理解的，α的引入应该是为了在实际计算中控制迭代速度）</p>
+
+<p>α是learing rate ，随着梯度的不断下降，dJ(θ)/dθ也在不停的变小，所以其实不需要改变α，步长自然就会不断变小。</p>
+
+<p>然后讲了多参数的线性回归的cost funtion 和各个参数的update rule，应该很好理解。</p>
+
+<h4>在多参数的线性回归实践中，讲了一些实际使用时的技巧</h4>
+
+<h5>Feature Scaling</h5>
+
+<p>当有多个参数的时候，如果多个参数的取值范围差异比较大，则使用梯度下降法的效率比较低（视频中以两个参数为例，当范围相差大，则等高线为长椭圆，下降过程缓慢），所以最好将所有参数采用mean normalization缩放一下,即：</p>
+
+<p>x := （x-样本均值）/样本取值区间长度</p>
+
+<p>在选取α的时候，太小会导致下降过程很慢，太大会导致无法convergence</p>
+
+<h5>Feature的选择和Polynomial Regression</h5>
+
+<p>feature的选择很重要，比如选择一个特征：面积 就比选两个特征：长和宽 要好</p>
+
+<p>关于多项式回归，其实应该是feature选择的一个子问题，即将特征的多项式作为一个新的特征，当然要注意参数范围随之相应变化。</p>
+
+<h5>Normal Equation</h5>
+
+<p>用矩阵运算的方式来求解θ，具体过程不赘述</p>
+
+<p>θ = (XTX)-1XTY</p>
+
+<p>这就是我们所说的Normal Equation了。</p>
+
+<p>然后分析了Normal Equation和gradient descent的优缺点。Normal Equation由于是矩阵计算，所以可以不用在意α的选择，而且也不用迭代，但缺点是当特征数量n过大时，由于要计算矩阵的逆，所以计算会很慢。而相对的，gradient descent则在n很大时也能很好的运行。</p>
+
+<h4>Octave</h4>
+
+<p>看了下octave的视频，整体感觉跟matlab差不多，有免费的matlab用也就不折腾octave了，当然对于没好好学过matlab的看一下这几课视频还是很有必要的，对看论文和代码都有帮助。</p>
+
+<p>比如对于vector A 和B</p>
+
+<p>[A, B] = [A B] 表示横向组合成一个新的vector
+[A;B]表示竖向组合成一个vector</p>
+
+<p>对vector A，A'表示A的转置矩阵（transpose）（这个以前论文里看到过，还以为是求导 - -！）</p>
+
+<h4>Logistic Regression</h4>
+
+<p>传说中的逻辑死地回归，主要用于0&lt;=h(x)&lt;=1的分类问题。由于线性分类的不足，比如Tumor size的分类问题，只有当样本空间分布均匀对称的时候有效,而logistic regression很好的解决这类问题。</p>
+
+<p>首先介绍了Logistic function(也叫Sigmoid function，为啥叫这名？）</p>
+
+<pre><code>g（z）=1/(1+e^(-z))
+</code></pre>
+
+<p>画一下这个函数曲线就明白了其取值范围为[0,1]。</p>
+
+</div>
+
+<div id="disqus_container">
+    <div style="margin-bottom:20px" class="right">
+        <script type="text/javascript" charset="utf-8">
+        (function(){
+          var _w = 86 , _h = 16;
+          var param = {
+            url:location.href,
+            type:'6',
+            count:'', /**是否显示分享数，1显示(可选)*/
+            appkey:'', /**您申请的应用appkey,显示分享来源(可选)*/
+            title:'', /**分享的文字内容(可选，默认为所在页面的title)*/
+            pic:'', /**分享图片的路径(可选)*/
+            ralateUid:'1865415451', /**关联用户的UID，分享微博会@该用户(可选)*/
+            language:'zh_cn', /**设置语言，zh_cn|zh_tw(可选)*/
+            rnd:new Date().valueOf()
+          }
+          var temp = [];
+          for( var p in param ){
+            temp.push(p + '=' + encodeURIComponent( param[p] || '' ) )
+          }
+          document.write('<iframe allowTransparency="true" frameborder="0" scrolling="no" src="http://hits.sinajs.cn/A1/weiboshare.html?' + temp.join('&') + '" width="'+ _w+'" height="'+_h+'"></iframe>')
+        })()
+        </script>
+    </div>
+    <a href="#" class="comment" onclick="return false;">点击查看评论</a>
+ 	<div id="disqus_thread"></div>
+
+
+</div>
+
+<!--<iframe width="100%" height="75" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=75&fansRow=2&ptype=1&speed=0&skin=5&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1855270953&verifier=375b89d6&dpc=1"></iframe>-->
+
+
+<script src="/js/post.js" type="text/javascript"></script>
+
+</div>
+
+
+    <!--*********************************************************-->
+    <!--****** 宝贝儿，看见这个时候，删掉下面的统计代码哦~ ******-->
+    <!--************* 再推荐下我的第一篇博客哦~~ ****************-->
+    <!--*********************************************************-->
+
+
+    <script type="text/javascript">
+        $(function(){
+            $('.home-follow').click(function(e){
+                e.preventDefault();
+
+                if($('.home-contact').is(':visible')){
+                    $('.home-contact').slideUp(100);
+                }else{
+                    $('.home-contact').slideDown(100);
+                }
+            });
+        })
+    </script>
+</body>
+</html>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--
+    * Author:         BeiYuu
+    -->
+    <meta charset="utf-8" />
+    <title>ios中view，viewcontroller的理解 | 林 | blog</title>
+    <meta name="author" content="LinChaohui" />
+    <meta name="description" content="LinChaohui's Blog" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="/css/default.css" type="text/css" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/atom.xml" />
+    <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+</head>
+<body>
+
+    <div class="home-menu">
+        <div class="home-icon-con">
+            <a class="home-menu-icon" href="/">LinChaohui</a>
+            <a class="home-follow" href="#" title="Contact Me">+</a>
+        </div>
+        <div class="home-contact" background-color:#212121>
+            <a href="http://weibo.com/linchaohui/" target="_blank" style="margin-left:-5px;"><img src="http://www.weibo.com/favicon.ico" alt="" width="25"/></a>
+            <a href="https://gist.github.com/chaohui0/" target="_blank" style="text-align:center;"><img src="https://www.github.com/favicon.ico" alt="" width="25"/></a>
+            <a href="mailto:chaohui0@gmail.com" target="_blank" style="text-align:right"><img src="https://mail.google.com/favicon.ico" alt="" width="25"/></a>
+        </div>
+    </div>
+
+    <div id="content">
+    <link rel="stylesheet" href="/js/prettify/prettify.css" />
+
+
+<div class="entry">
+    <h1 class="entry-title"><a href="/ios-view" title="ios中view，viewcontroller的理解">ios中view，viewcontroller的理解</a></h1>
+    <p class="entry-date">2013-08-26</p>
+    <h2>view与viewController</h2>
+
+<h5>题记：这注定是一遍慢慢完善的blog</h5>
+
+<p>做ios开发，接触最多的当然是各种view，一开始对view和viewController的关系和使用并没深入的体会，只是简单的新建一个viewController并添加响应的xib文件，然后就开始了拖动各种控件和添加消息响应的过程。这种美好的使用方式在面对一些个性化定制功能的view的时候，就悲剧了。当然，折腾了一下也发现了一些东西,好吧，生命不息折腾不止啊。</p>
+
+<h3>viewController中的viewDidLoad、loadView</h3>
+
+<p>当你在百度上谷歌一下这两个函数，会发现有很多人说一个是加载xib文件后调用，一个是自己创建view后调用的。一个偶然的折腾，我发现这个认知比较的肤浅。</p>
+
+<p>当在一个木有对应xib文件的revertViewController类中添加如下方法：</p>
+
+<p>-(void)setFrame:(CGRect)rect
+{
+    self.view = [[UIView alloc]initWithFrame:rect];</p>
+
+<p>}</p>
+
+<p>然后在parentViewController中</p>
+
+<pre><code>revert = [[revertViewController alloc]init];
+[revert setFrame:CGRectMake(100, 100, 200, 200)];
+[self.view addSubview:revert.view];
+</code></pre>
+
+<p>你会发现竟然revertViewController中的viewDidLoad、loadView两个方法都没被调用。而当注释掉setFrame中的构造self.view函数，会发现这两个方法都被调用了。so，据此可以判断，这两个方法并不是在controller alloc或者init的时候调用，而是再这个controller的view将要被展示的时候，并且这个controller的view还是nil的时候才会被调用。</p>
+
+</div>
+
+<div id="disqus_container">
+    <div style="margin-bottom:20px" class="right">
+        <script type="text/javascript" charset="utf-8">
+        (function(){
+          var _w = 86 , _h = 16;
+          var param = {
+            url:location.href,
+            type:'6',
+            count:'', /**是否显示分享数，1显示(可选)*/
+            appkey:'', /**您申请的应用appkey,显示分享来源(可选)*/
+            title:'', /**分享的文字内容(可选，默认为所在页面的title)*/
+            pic:'', /**分享图片的路径(可选)*/
+            ralateUid:'1865415451', /**关联用户的UID，分享微博会@该用户(可选)*/
+            language:'zh_cn', /**设置语言，zh_cn|zh_tw(可选)*/
+            rnd:new Date().valueOf()
+          }
+          var temp = [];
+          for( var p in param ){
+            temp.push(p + '=' + encodeURIComponent( param[p] || '' ) )
+          }
+          document.write('<iframe allowTransparency="true" frameborder="0" scrolling="no" src="http://hits.sinajs.cn/A1/weiboshare.html?' + temp.join('&') + '" width="'+ _w+'" height="'+_h+'"></iframe>')
+        })()
+        </script>
+    </div>
+    <a href="#" class="comment" onclick="return false;">点击查看评论</a>
+ 	<div id="disqus_thread"></div>
+
+
+</div>
+
+<!--<iframe width="100%" height="75" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=75&fansRow=2&ptype=1&speed=0&skin=5&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1855270953&verifier=375b89d6&dpc=1"></iframe>-->
+
+
+<script src="/js/post.js" type="text/javascript"></script>
+
+</div>
+
+
+    <!--*********************************************************-->
+    <!--****** 宝贝儿，看见这个时候，删掉下面的统计代码哦~ ******-->
+    <!--************* 再推荐下我的第一篇博客哦~~ ****************-->
+    <!--*********************************************************-->
+
+
+    <script type="text/javascript">
+        $(function(){
+            $('.home-follow').click(function(e){
+                e.preventDefault();
+
+                if($('.home-contact').is(':visible')){
+                    $('.home-contact').slideUp(100);
+                }else{
+                    $('.home-contact').slideDown(100);
+                }
+            });
+        })
+    </script>
+</body>
+</html>
+
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--
+    * Author:         BeiYuu
+    -->
+    <meta charset="utf-8" />
+    <title>林 | blog</title>
+    <meta name="author" content="LinChaohui" />
+    <meta name="description" content="LinChaohui's Blog" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="/css/default.css" type="text/css" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/atom.xml" />
+    <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+</head>
+<body>
+
+    <div class="home-menu">
+        <div class="home-icon-con">
+            <a class="home-menu-icon" href="/">LinChaohui</a>
+            <a class="home-follow" href="#" title="Contact Me">+</a>
+        </div>
+        <div class="home-contact" background-color:#212121>
+            <a href="http://weibo.com/linchaohui/" target="_blank" style="margin-left:-5px;"><img src="http://www.weibo.com/favicon.ico" alt="" width="25"/></a>
+            <a href="https://gist.github.com/chaohui0/" target="_blank" style="text-align:center;"><img src="https://www.github.com/favicon.ico" alt="" width="25"/></a>
+            <a href="mailto:chaohui0@gmail.com" target="_blank" style="text-align:right"><img src="https://mail.google.com/favicon.ico" alt="" width="25"/></a>
+        </div>
+    </div>
+
+    <div class="index-content share">
+    <div class="section">
+        <ul class="artical-cate">
+            <li ><a href="/"><span>Geek之路</span></a></li>
+            <li style="text-align:center"><a href="/thinking"><span>胡思乱想</span></a></li>
+            <li class="on" style="text-align:right"><a href="/share"><span>我的分享</span></a></li>
+        </ul>
+
+        <div class="cate-bar"><span id="cateBar"></span></div>
+
+        <ul class="artical-list">
+        
+            <li>
+                <h2><a href="/c%2B%2B_dir">c++遍历文件夹</a></h2>
+                <div class="title-desc">整理下常用功能模块，提高工作效率</div>
+            </li>
+        
+            <li>
+                <h2><a href="/vi-skill">vi命令学习</a></h2>
+                <div class="title-desc">想用就学，学完就记，记完就用，用完不忘</div>
+            </li>
+        
+            <li>
+                <h2><a href="/libevent">libevent 多线程Http服务器</a></h2>
+                <div class="title-desc">还是很好很强大哦</div>
+            </li>
+        
+            <li>
+                <h2><a href="/A-python-httpServer">一个强大的python http服务器</a></h2>
+                <div class="title-desc">很好很强大哦</div>
+            </li>
+        
+        </ul>
+    </div>
+    <div class="aside">
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(function(){
+        function animateBar($item,noAni){
+            var spanLeft = $item.find('span').offset().left;
+            var conLeft = $item.parent().offset().left;
+            var left = spanLeft - conLeft;
+            var width = $item.find('span').width() + 8;
+
+            if(noAni){
+                $('#cateBar').css({left:left,width:width})
+            }else{
+                $('#cateBar').stop().animate({left:left,width:width},300)
+            }
+        }
+
+        var waitForFinalEvent = (function () {
+            var timers = {};
+            return function (callback, ms, uniqueId) {
+                if (!uniqueId) {
+                    uniqueId = "Don't call this twice without a uniqueId";
+                }
+                if (timers[uniqueId]) {
+                    clearTimeout (timers[uniqueId]);
+                }
+                timers[uniqueId] = setTimeout(callback, ms);
+            };
+        })();
+
+        $('.artical-cate li').mouseenter(function(){
+            animateBar($(this));
+        }).mouseleave(function(){
+            animateBar($('.artical-cate .on'));
+        });
+
+        $(window).resize(function(e){
+            waitForFinalEvent(function(){
+                animateBar($('.artical-cate .on'));
+            })
+        })
+        animateBar($('.artical-cate .on'),true);
+    });
+</script>
+
+
+    <!--*********************************************************-->
+    <!--****** 宝贝儿，看见这个时候，删掉下面的统计代码哦~ ******-->
+    <!--************* 再推荐下我的第一篇博客哦~~ ****************-->
+    <!--*********************************************************-->
+
+
+    <script type="text/javascript">
+        $(function(){
+            $('.home-follow').click(function(e){
+                e.preventDefault();
+
+                if($('.home-contact').is(':visible')){
+                    $('.home-contact').slideUp(100);
+                }else{
+                    $('.home-contact').slideDown(100);
+                }
+            });
+        })
+    </script>
+</body>
+</html>
+
+</body>
+</html>

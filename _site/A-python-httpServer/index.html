@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--
+    * Author:         BeiYuu
+    -->
+    <meta charset="utf-8" />
+    <title>一个强大的python http服务器 | 林 | blog</title>
+    <meta name="author" content="LinChaohui" />
+    <meta name="description" content="LinChaohui's Blog" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="/css/default.css" type="text/css" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/atom.xml" />
+    <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+</head>
+<body>
+
+    <div class="home-menu">
+        <div class="home-icon-con">
+            <a class="home-menu-icon" href="/">LinChaohui</a>
+            <a class="home-follow" href="#" title="Contact Me">+</a>
+        </div>
+        <div class="home-contact" background-color:#212121>
+            <a href="http://weibo.com/linchaohui/" target="_blank" style="margin-left:-5px;"><img src="http://www.weibo.com/favicon.ico" alt="" width="25"/></a>
+            <a href="https://gist.github.com/chaohui0/" target="_blank" style="text-align:center;"><img src="https://www.github.com/favicon.ico" alt="" width="25"/></a>
+            <a href="mailto:chaohui0@gmail.com" target="_blank" style="text-align:right"><img src="https://mail.google.com/favicon.ico" alt="" width="25"/></a>
+        </div>
+    </div>
+
+    <div id="content">
+    <link rel="stylesheet" href="/js/prettify/prettify.css" />
+
+
+<div class="entry">
+    <h1 class="entry-title"><a href="/A-python-httpServer" title="一个强大的python http服务器">一个强大的python http服务器</a></h1>
+    <p class="entry-date">2013-08-28</p>
+    <pre><code>import glob
+import os.path
+
+import cherrypy
+from cherrypy.lib.static import serve_file
+
+
+class Root:
+    def index(self, directory="."):
+        html = """&lt;html&gt;&lt;body&gt;&lt;h2&gt;Here are the files in the selected directory:&lt;/h2&gt;
+        &lt;a href="index?directory=%s"&gt;Up&lt;/a&gt;&lt;br /&gt;
+        """ % os.path.dirname(os.path.abspath(directory))
+
+
+        i = 0
+        html += '&lt;table border="1" width=1000&gt;'
+        html += '&lt;tr&gt;'
+        for filename in glob.glob(directory + '/*'):
+            html += '&lt;td width="20%"&gt;'
+
+            absPath = os.path.abspath(filename)
+            if os.path.isdir(absPath):
+                html += '[DIR]&lt;a href="/index?directory=' + absPath + '"&gt;' + os.path.basename(filename) + "&lt;/a&gt; &lt;br /&gt;"
+            else:
+                html += '&lt;a href="/download/?filepath=' + absPath + '"&gt;' + os.path.basename(filename) + "&lt;/a&gt; &lt;br /&gt;"
+                if absPath.endswith('jpg') or absPath.endswith('jpeg') or absPath.endswith('png'):
+                    html += '&lt;img src="/download/?filepath=' + absPath + '" width=200 height=200/&gt; &lt;br /&gt;'
+
+            html += '&lt;/td&gt;'
+            i += 1
+            if i % 5 == 0:
+                html += '&lt;/tr&gt;&lt;tr&gt;'
+        html += '&lt;/tr&gt;'
+        html += '&lt;/table&gt;'
+
+        html += """&lt;/body&gt;&lt;/html&gt;"""
+        return html
+    index.exposed = True
+
+class Download:
+    def index(self, filepath):
+        return serve_file(filepath, "application/x-download", "attachment")
+    index.exposed = True
+
+if __name__ == '__main__':
+    root = Root()
+    root.download = Download()
+    cherrypy.config.update({'server.socket_host':'your ip address', 'server.socket_port':12345})
+    cherrypy.quickstart(root)
+</code></pre>
+
+<p>python的缩进牛逼而又蛋疼！总结完毕</p>
+
+</div>
+
+<div id="disqus_container">
+    <div style="margin-bottom:20px" class="right">
+        <script type="text/javascript" charset="utf-8">
+        (function(){
+          var _w = 86 , _h = 16;
+          var param = {
+            url:location.href,
+            type:'6',
+            count:'', /**是否显示分享数，1显示(可选)*/
+            appkey:'', /**您申请的应用appkey,显示分享来源(可选)*/
+            title:'', /**分享的文字内容(可选，默认为所在页面的title)*/
+            pic:'', /**分享图片的路径(可选)*/
+            ralateUid:'1865415451', /**关联用户的UID，分享微博会@该用户(可选)*/
+            language:'zh_cn', /**设置语言，zh_cn|zh_tw(可选)*/
+            rnd:new Date().valueOf()
+          }
+          var temp = [];
+          for( var p in param ){
+            temp.push(p + '=' + encodeURIComponent( param[p] || '' ) )
+          }
+          document.write('<iframe allowTransparency="true" frameborder="0" scrolling="no" src="http://hits.sinajs.cn/A1/weiboshare.html?' + temp.join('&') + '" width="'+ _w+'" height="'+_h+'"></iframe>')
+        })()
+        </script>
+    </div>
+    <a href="#" class="comment" onclick="return false;">点击查看评论</a>
+ 	<div id="disqus_thread"></div>
+
+
+</div>
+
+<!--<iframe width="100%" height="75" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=75&fansRow=2&ptype=1&speed=0&skin=5&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1855270953&verifier=375b89d6&dpc=1"></iframe>-->
+
+
+<script src="/js/post.js" type="text/javascript"></script>
+
+</div>
+
+
+    <!--*********************************************************-->
+    <!--****** 宝贝儿，看见这个时候，删掉下面的统计代码哦~ ******-->
+    <!--************* 再推荐下我的第一篇博客哦~~ ****************-->
+    <!--*********************************************************-->
+
+
+    <script type="text/javascript">
+        $(function(){
+            $('.home-follow').click(function(e){
+                e.preventDefault();
+
+                if($('.home-contact').is(':visible')){
+                    $('.home-contact').slideUp(100);
+                }else{
+                    $('.home-contact').slideDown(100);
+                }
+            });
+        })
+    </script>
+</body>
+</html>
+
+</body>
+</html>

@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ 
+   <title>林 | blog</title>
+   <link href="http://www.linchaohui.cn/atom.xml" rel="self" type="application/atom+xml"/>
+   <link href="http://www.linchaohui.cn" rel="alternate" type="text/html" />
+   <updated>2013-11-15T17:23:35+08:00</updated>
+   <id>http://www.linchaohui.cn</id>
+   <author>
+     <name></name>
+     <email></email>
+   </author>
+
+   
+   <entry>
+     <title>Mac版matlab的c++编译库设置</title>
+     <link href="http://www.linchaohui.cn/Matlab-Mac-Mex"/>
+     <updated>2013-11-07T00:00:00+08:00</updated>
+     <id>http://www.linchaohui.cn/Matlab-Mac-Mex</id>
+     <content type="html">&lt;p&gt;刚把mac升级到maverick，然后装了个2013a的matlab，结果在用mex编译c++文件的时候，不停的报错：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;xcodebuild: error: SDK &quot;macosx10.7&quot; cannot be located.
+xcrun: error: unable to find utility &quot;clang++&quot;, not a developer tool or in PATH
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;查了半天，也不知道怎么回事，幸得大牛指导，原来升级了os和xcode，现在的sdk已经是macosx10.9了，所以改一下matlab的编译连接库就行了&lt;/p&gt;
+
+&lt;p&gt;修改/Applications/MATLAB_R2013a.app/bin/ 下面的mexopts.sh 和 mbuildopts.sh
+将所有macosx10.7改为macosx10.9&lt;/p&gt;
+
+&lt;p&gt;然后打开matlab，在命令行中输入&lt;/p&gt;
+
+&lt;p&gt;mbuild -setup 重安装mbuild
+mex -setup 重安装mex&lt;/p&gt;
+</content>
+   </entry>
+   
+   <entry>
+     <title>Machine Learning 学习笔记</title>
+     <link href="http://www.linchaohui.cn/ML-Note"/>
+     <updated>2013-11-01T00:00:00+08:00</updated>
+     <id>http://www.linchaohui.cn/ML-Note</id>
+     <content type="html">&lt;h2&gt;Introduce&lt;/h2&gt;
+
+&lt;p&gt;森森的觉得，应该花点时间好好学习下基础知识，所以开始认真的学习Ng大神的视频教程。&lt;/p&gt;
+
+&lt;p&gt;链接地址：https://class.coursera.org/ml-004/lecture/index&lt;/p&gt;
+
+&lt;p&gt;感觉比那个网易公开课的课堂录制视频要简单，还有各种字幕，题目，目标就是一天至少一课吧。&lt;/p&gt;
+
+&lt;h3&gt;Supervised Learning&lt;/h3&gt;
+
+&lt;p&gt;监督学习，即数据集中的每个数据都有相应的正确答案，算法基于这些做出预测&lt;/p&gt;
+
+&lt;p&gt;主要有分类问题和回归问题&lt;/p&gt;
+
+&lt;p&gt;分类问题就是0-1离散分类&lt;/p&gt;
+
+&lt;p&gt;回归问题就是通过回归来预测一个连续值的输出（发现需要补下回归分析，最小二乘法这些大学数学的东西了）&lt;/p&gt;
+
+&lt;h3&gt;Unsupervised Learning&lt;/h3&gt;
+
+&lt;p&gt;无监督学习，与上述的分类问题不同的是，分类问题告诉你很多数据集的结果（比如某种肿瘤大小是否是癌症），而无监督学习的数据集是没有结果的，所以这其实是一个聚类问题,你需要根据数据集获得多个聚类（比如google的新闻聚类，将不同网站的同一条新闻聚合）。&lt;/p&gt;
+
+&lt;p&gt;在鸡尾酒会问题上，在多个人同时说话中单独分离出每个人的声音，对，解决这个问题只需要使用一行代码!!介绍了下Octave软件（比matlab还牛逼？）,使用这个建模，然后用c++实现，这样能极大的加快效率（好吧，看来后面还要写一篇octave的入门心得）&lt;/p&gt;
+
+&lt;p&gt;（第一课就这样愉快的结束了）&lt;/p&gt;
+
+&lt;h3&gt;linear regression&lt;/h3&gt;
+
+&lt;p&gt;主要讲了cost function，这个其实比较简单，就是误差的平方和除以2m，应该是为了求导的方便吧。&lt;/p&gt;
+
+&lt;p&gt;有了cost function，然后讲了下在一个theta参数下是个抛物线，两个theta就是bowl-shape的东东，这样就很自然的引出了等高线(contour figures)的概念。&lt;/p&gt;
+
+&lt;p&gt;有了等高线的概念，然后就是介绍传说中的梯度下降（gradient descent)了。&lt;/p&gt;
+
+&lt;p&gt;梯度下降中要注意的一点是多参数更新的计算顺序问题，计算每个参数的下一个步长值，要先把所有偏导先算出来，然后计算并赋给新参数，切忌算出一个新参数，再用新参数求另一个参数的偏导。&lt;/p&gt;
+
+&lt;p&gt;还有一个新手误区，关于步长的问题&lt;/p&gt;
+
+&lt;p&gt;θ:=θ-α·dJ(θ)/dθ
+（关于这个公式的由来，个人觉得dJ(θ)/dθ是比较容易理解的，α的引入应该是为了在实际计算中控制迭代速度）&lt;/p&gt;
+
+&lt;p&gt;α是learing rate ，随着梯度的不断下降，dJ(θ)/dθ也在不停的变小，所以其实不需要改变α，步长自然就会不断变小。&lt;/p&gt;
+
+&lt;p&gt;然后讲了多参数的线性回归的cost funtion 和各个参数的update rule，应该很好理解。&lt;/p&gt;
+
+&lt;h4&gt;在多参数的线性回归实践中，讲了一些实际使用时的技巧&lt;/h4&gt;
+
+&lt;h5&gt;Feature Scaling&lt;/h5&gt;
+
+&lt;p&gt;当有多个参数的时候，如果多个参数的取值范围差异比较大，则使用梯度下降法的效率比较低（视频中以两个参数为例，当范围相差大，则等高线为长椭圆，下降过程缓慢），所以最好将所有参数采用mean normalization缩放一下,即：&lt;/p&gt;
+
+&lt;p&gt;x := （x-样本均值）/样本取值区间长度&lt;/p&gt;
+
+&lt;p&gt;在选取α的时候，太小会导致下降过程很慢，太大会导致无法convergence&lt;/p&gt;
+
+&lt;h5&gt;Feature的选择和Polynomial Regression&lt;/h5&gt;
+
+&lt;p&gt;feature的选择很重要，比如选择一个特征：面积 就比选两个特征：长和宽 要好&lt;/p&gt;
+
+&lt;p&gt;关于多项式回归，其实应该是feature选择的一个子问题，即将特征的多项式作为一个新的特征，当然要注意参数范围随之相应变化。&lt;/p&gt;
+
+&lt;h5&gt;Normal Equation&lt;/h5&gt;
+
+&lt;p&gt;用矩阵运算的方式来求解θ，具体过程不赘述&lt;/p&gt;
+
+&lt;p&gt;θ = (XTX)-1XTY&lt;/p&gt;
+
+&lt;p&gt;这就是我们所说的Normal Equation了。&lt;/p&gt;
+
+&lt;p&gt;然后分析了Normal Equation和gradient descent的优缺点。Normal Equation由于是矩阵计算，所以可以不用在意α的选择，而且也不用迭代，但缺点是当特征数量n过大时，由于要计算矩阵的逆，所以计算会很慢。而相对的，gradient descent则在n很大时也能很好的运行。&lt;/p&gt;
+
+&lt;h4&gt;Octave&lt;/h4&gt;
+
+&lt;p&gt;看了下octave的视频，整体感觉跟matlab差不多，有免费的matlab用也就不折腾octave了，当然对于没好好学过matlab的看一下这几课视频还是很有必要的，对看论文和代码都有帮助。&lt;/p&gt;
+
+&lt;p&gt;比如对于vector A 和B&lt;/p&gt;
+
+&lt;p&gt;[A, B] = [A B] 表示横向组合成一个新的vector
+[A;B]表示竖向组合成一个vector&lt;/p&gt;
+
+&lt;p&gt;对vector A，A&#39;表示A的转置矩阵（transpose）（这个以前论文里看到过，还以为是求导 - -！）&lt;/p&gt;
+
+&lt;h4&gt;Logistic Regression&lt;/h4&gt;
+
+&lt;p&gt;传说中的逻辑死地回归，主要用于0&amp;lt;=h(x)&amp;lt;=1的分类问题。由于线性分类的不足，比如Tumor size的分类问题，只有当样本空间分布均匀对称的时候有效,而logistic regression很好的解决这类问题。&lt;/p&gt;
+
+&lt;p&gt;首先介绍了Logistic function(也叫Sigmoid function，为啥叫这名？）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;g（z）=1/(1+e^(-z))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;画一下这个函数曲线就明白了其取值范围为[0,1]。&lt;/p&gt;
+</content>
+   </entry>
+   
+   <entry>
+     <title>c++遍历文件夹</title>
+     <link href="http://www.linchaohui.cn/c%2B%2B_dir"/>
+     <updated>2013-10-31T00:00:00+08:00</updated>
+     <id>http://www.linchaohui.cn/c++_dir</id>
+     <content type="html">&lt;p&gt;bool readDir(char &lt;em&gt;path)//遍历文件夹
+{
+    cout&amp;lt;&amp;lt;&quot;in readDir :&quot;&amp;lt;&amp;lt;path&amp;lt;&amp;lt;endl;
+    struct dirent&lt;/em&gt; ent = NULL;
+    DIR *pDir;
+    pDir=opendir(path);
+    if(!pDir)
+    {
+        printf(&quot;open dir error!\n&quot;);
+        return false;
+    }
+    while (NULL != (ent=readdir(pDir)))
+    {
+        if (ent-&gt;d_type == DT_DIR)    &lt;br/&gt;
+        {
+            if ( strcmp(ent-&gt;d_name, &quot;.&quot;) &amp;amp;&amp;amp; strcmp(ent-&gt;d_name, &quot;..&quot;) )
+            {
+                char imagePath[200]={0};
+                strcpy(imagePath,path);
+                strcat(imagePath,&quot;/&quot;);
+                strcat(imagePath,ent-&gt;d_name);
+                if(!readDir(imagePath))
+                {
+                    printf(&quot;!!attention: readDir TO max size\n&quot;);
+                    return false;
+                }
+            }&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    }
+    else if(strstr(ent-&amp;gt;d_name,&quot;.jpg&quot;)&amp;gt;0)
+    {
+
+        char imagePath[100];
+        memset(imagePath,0,100);
+
+        strcpy(imagePath,path);
+        strcat(imagePath,&quot;/&quot;);
+        strcat(imagePath,ent-&amp;gt;d_name);
+        string imageFile( ent-&amp;gt;d_name);
+
+        //imageFileMap.insert(pair&amp;lt;IMAGEID,string&amp;gt;(++image_pt,imageFile));
+        printf(&quot;file name:%s , id:%lu, ent-&amp;gt;d_reclen:%d   type:%d\n&quot;,ent-&amp;gt;d_name,image_pt,ent-&amp;gt;d_reclen,ent-&amp;gt;d_type);
+
+    }
+}
+closedir(pDir); 
+return true;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;}&lt;/p&gt;
+</content>
+   </entry>
+   
+   <entry>
+     <title>vi命令学习</title>
+     <link href="http://www.linchaohui.cn/vi-skill"/>
+     <updated>2013-10-23T00:00:00+08:00</updated>
+     <id>http://www.linchaohui.cn/vi-skill</id>
+     <content type="html">&lt;h2&gt;吐槽一下&lt;/h2&gt;
+
+&lt;p&gt;其实之前一直不喜欢使用vi，讨厌记各种命令，不过开了这个blog，发现不得不学习各种命令来加快效率啊，用了一段时间发现，其实真要用了，记点命令还是很有成就感的啊。&lt;/p&gt;
+
+&lt;h2&gt;常用命令&lt;/h2&gt;
+
+&lt;p&gt;光标移动相关：h j k l ，一个小技巧是按了上述键再加个数字键，可以跳多个&lt;/p&gt;
+
+&lt;p&gt;行首：（&lt;/p&gt;
+
+&lt;p&gt;当前行尾：$&lt;/p&gt;
+
+&lt;p&gt;文件尾：G（注意大写的）&lt;/p&gt;
+
+&lt;p&gt;删除：d&lt;/p&gt;
+
+&lt;p&gt;多行原则：v&lt;/p&gt;
+
+&lt;p&gt;复制：y&lt;/p&gt;
+
+&lt;p&gt;黏贴：p&lt;/p&gt;
+
+&lt;p&gt;插入：i&lt;/p&gt;
+
+&lt;p&gt;撤销：u&lt;/p&gt;
+
+&lt;p&gt;缩进和缩出： &gt; 和 &amp;lt;&lt;/p&gt;
+</content>
+   </entry>
+   
+   <entry>
+     <title>UIImage的旋转问题</title>
+     <link href="http://www.linchaohui.cn/IOS-UIImage-Rotation"/>
+     <updated>2013-10-23T00:00:00+08:00</updated>
+     <id>http://www.linchaohui.cn/IOS-UIImage-Rotation</id>
+     <content type="html">&lt;h2&gt;还是啰嗦下前言&lt;/h2&gt;
+
+&lt;p&gt;在上上篇&lt;a href=&quot;http://linchaohui.cn/ios-some-problems/&quot;&gt;ios路上的一些坑&lt;/a&gt;里讲了一点拍照的旋转问题。但是，这远远不能解决碰到的各种令人发指的旋转问题，特此另开一篇，深入的理解一下有关原理，记录关于旋转问题的一些解决方案。&lt;/p&gt;
+
+&lt;h2&gt;imageOrientation的问题&lt;/h2&gt;
+
+&lt;p&gt;用相机拍摄出来的照片含有EXIF信息，UIImage的imageOrientation属性指的就是EXIF中的orientation信息。
+如果我们忽略orientation信息，而直接对照片进行像素处理或者drawInRect等操作，得到的结果是翻转或者旋转90之后的样子。这是因为我们执行像素处理或者drawInRect等操作之后，imageOrientaion信息被删除了，imageOrientaion被重设为0，造成照片内容和imageOrientaion不匹配。
+所以，在对照片进行处理之前，先将照片旋转到正确的方向，并且返回的imageOrientaion为0。
+下面这个方法就是一个UIImage category中的方法，用它可以达到以上目的。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (UIImage *)fixOrientation:(UIImage *)aImage {
+
+    // No-op if the orientation is already correct
+    if (aImage.imageOrientation == UIImageOrientationUp) 
+    return aImage;
+
+    // We need to calculate the proper transformation to make the image upright.
+    // We do it in 2 steps: Rotate if Left/Right/Down, and then flip if Mirrored.
+    CGAffineTransform transform = CGAffineTransformIdentity;
+
+    switch (aImage.imageOrientation) {
+    case UIImageOrientationDown:
+    case UIImageOrientationDownMirrored:
+        transform = CGAffineTransformTranslate(transform, aImage.size.width, aImage.size.height);
+        transform = CGAffineTransformRotate(transform, M_PI);
+        break;
+
+    case UIImageOrientationLeft:
+    case UIImageOrientationLeftMirrored:
+        transform = CGAffineTransformTranslate(transform, aImage.size.width, 0);
+        transform = CGAffineTransformRotate(transform, M_PI_2);
+        break;
+
+    case UIImageOrientationRight:
+    case UIImageOrientationRightMirrored:
+        transform = CGAffineTransformTranslate(transform, 0, aImage.size.height);
+        transform = CGAffineTransformRotate(transform, -M_PI_2);
+        break;
+    default:
+        break;
+    }
+
+    switch (aImage.imageOrientation) {
+    case UIImageOrientationUpMirrored:
+    case UIImageOrientationDownMirrored:
+        transform = CGAffineTransformTranslate(transform, aImage.size.width, 0);
+        transform = CGAffineTransformScale(transform, -1, 1);
+        break;
+
+    case UIImageOrientationLeftMirrored:
+    case UIImageOrientationRightMirrored:
+        transform = CGAffineTransformTranslate(transform, aImage.size.height, 0);
+        transform = CGAffineTransformScale(transform, -1, 1);
+        break;
+    default:
+        break;
+    }
+
+    // Now we draw the underlying CGImage into a new context, applying the transform
+    // calculated above.
+    CGContextRef ctx = CGBitmapContextCreate(NULL, aImage.size.width, aImage.size.height,
+                         CGImageGetBitsPerComponent(aImage.CGImage), 0,
+                         CGImageGetColorSpace(aImage.CGImage),
+                         CGImageGetBitmapInfo(aImage.CGImage));
+    CGContextConcatCTM(ctx, transform);
+    switch (aImage.imageOrientation) {
+    case UIImageOrientationLeft:
+    case UIImageOrientationLeftMirrored:
+    case UIImageOrientationRight:
+    case UIImageOrientationRightMirrored:
+        // Grr...
+        CGContextDrawImage(ctx, CGRectMake(0,0,aImage.size.height,aImage.size.width), aImage.CGImage);
+        break;
+
+    default:
+        CGContextDrawImage(ctx, CGRectMake(0,0,aImage.size.width,aImage.size.height), aImage.CGImage);
+        break;
+    }
+
+    // And now we just create a new UIImage from the drawing context
+    CGImageRef cgimg = CGBitmapContextCreateImage(ctx);
+    UIImage *img = [UIImage imageWithCGImage:cgimg];
+    CGContextRelease(ctx);
+    CGImageRelease(cgimg);
+    return img;
+}
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+   </entry>
+   
+   <entry>
+     <title>svm学习笔记</title>
+     <link href="http://www.linchaohui.cn/svm"/>
+     <updated>2013-10-15T00:00:00+08:00</updated>
+     <id>http://www.linchaohui.cn/svm</id>
+     <content type="html">&lt;h2&gt;一点前言&lt;/h2&gt;
+
+&lt;p&gt;app马上就要发布，后面开始机器学习相关的工作，这是当年毕业的时候最想做的东西，结果等了这么久才开始相关的学习。之前零零碎碎看了一些Andrew Ng教授的视频和一些blog，开始一步步思考，整理，归纳，记录吧。&lt;/p&gt;
+
+&lt;h2&gt;初始SVM&lt;/h2&gt;
+
+&lt;p&gt;SVM(Support Vector Machine)听了很久了，但没见过。首先还是学习一些名词解释吧。&lt;/p&gt;
+
+&lt;p&gt;http://www.cnblogs.com/LeftNotEasy/archive/2011/05/02/basic-of-svm.html&lt;/p&gt;
+
+&lt;p&gt;这篇文章比较浅显的讲解了一些基本概念，个人总结一下：&lt;/p&gt;
+
+&lt;p&gt;什么叫Support Vector：就是在线性分类中，距离分割线（或者分割超平面）距离最近的点。&lt;/p&gt;
+
+&lt;p&gt;Maximum Marginal: 使分割间隙最大化，这是分类器所最求的目标，其实也就是使support vector 距离分割线越远越好。&lt;/p&gt;
+
+&lt;p&gt;过拟合（over-fitting): 记得Ng的视频里讲，过拟合是指训练时，为提高对训练集的分类准确度，生成的分类函数过于复杂（也可能是没有去除噪声等干扰等导致），比如一条直线就可以基本准确分类的却使用二次曲线，这样可能训练集的分类准确度很高，但实用效果并不好。（个人理解,如有错误请指正）&lt;/p&gt;
+
+&lt;p&gt;欠拟合（under-fitting): 与过拟合相反，使用的分类函数过于简单，比如最优应该是3次函数的，确使用2次函数或直线（个人理解，大数据训练集才是王道）&lt;/p&gt;
+
+&lt;p&gt;核函数：碰到线性不可分的情况怎么办，让空间从原本的线性空间变成一个更高维的空间，在这个高维的线性空间下，再用一个超平面进行划分，这就需要核函数的帮忙了，先知道有这么个东西就可以了。&lt;/p&gt;
+
+&lt;p&gt;数学证明神马的可以参看该blog：&lt;/p&gt;
+
+&lt;p&gt;http://blog.csdn.net/v_july_v/article/details/7624837&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;下一步应该是用opencv的svm了吧，理论和实践总是有差距的。等熟练下再做个svm编程实践的记录吧。&lt;/p&gt;
+</content>
+   </entry>
+   
+   <entry>
+     <title>管理的一点想法</title>
+     <link href="http://www.linchaohui.cn/Management"/>
+     <updated>2013-10-10T00:00:00+08:00</updated>
+     <id>http://www.linchaohui.cn/Management</id>
+     <content type="html">&lt;p&gt;这几个月都带在着一个小团队做App，第一次做PM，多少也有了一些感悟。从一开始的觉得谁谁不靠谱的郁闷到后来的思考、安排并获得结果，确实感觉到了老大说过的一句：对事不对人是管理的原则。当然要完全做到这个也确实有难度的。&lt;/p&gt;
+
+&lt;p&gt;作为一个合格的PM，基本的要求当然是在boss给定的时间内获得一个结果，优秀的PM当然是获得一个好的结果，更牛逼的PM则会让队员们在紧张快乐的氛围中得到好的结果。&lt;/p&gt;
+
+&lt;p&gt;PM的一个主要工作就是分配任务，确定时间节点。但对于不同的人，需要不同的策略，比如自律行好的，有责任感的队员只需要告诉他截止时间点，要完成哪些事就ok，但是对于自律性差的，这明显是不够的。一开始就是没有了解这一点，所以导致分配给某人的任务在截止时间点根本拿不到结果，然后心里痛骂这个猪一样的队友，影响项目的整体进度，不得不把缓冲期也垫上了。后来跟同学在抱怨这个事情的时候，有同学提醒我，没有没用的人，只有用不好的领导。于是就反省了一下，再后来分配任务的时候，把握的一个原则就是，能力越差（这里的能力包含了技能熟练度，情商，智商，责任心等等，指完成一个任务的能力）的人，对其分配任务的时间点就要越细，比如，按天安排任务，并且告诉他各个任务的优先级，保证他串行工作，通常能力差的人不具备多线程完成多个任务的能力，如果你告诉他这个星期要完成3个任务，首先在他听完之后就会抱怨，然后在纠结半天先做哪个后做哪个，这样一周过去，你一个结果都拿不到。这是我之前安排任务的方式，因为别人就是这么给我安排任务的，但是，后来意识到，对于能力弱的，最好一次安排一个任务，按天甚至小时验收结果。&lt;/p&gt;
+
+&lt;p&gt;关于团队，比如工作氛围建设等更高级的管理经验，还是留待以后添加吧。&lt;/p&gt;
+</content>
+   </entry>
+   
+   <entry>
+     <title>ios路上的一些坑</title>
+     <link href="http://www.linchaohui.cn/ios-some-problems"/>
+     <updated>2013-09-28T00:00:00+08:00</updated>
+     <id>http://www.linchaohui.cn/ios-some-problems</id>
+     <content type="html">&lt;h2&gt;学会总结&lt;/h2&gt;
+
+&lt;p&gt;写IOS也快一年了，上了一个app，更新了N个版本，马上要上另一个app。怎么滴也算IOS初级开发者了，从一开始的一定要把NSString转成string来printf，到完全适应NS*的各种类，学习更是一个习惯的过程。将碰到的一些坑记录一下，要是有缘得见，也可以少掉几次。&lt;/p&gt;
+
+&lt;h2&gt;罗里吧嗦&lt;/h2&gt;
+
+&lt;h4&gt;1.关于设计&lt;/h4&gt;
+
+&lt;p&gt;设计和开发的配合很重要，一个好的设计能帮开发省去很多事情，当然一个坑爹的也会然你痛不欲生。如果和你配合的设计喜欢使用有一定透明度的按钮，请告诉it，这绝对是个坑爹的想法。&lt;/p&gt;
+
+&lt;h4&gt;2.各种icon&lt;/h4&gt;
+
+&lt;p&gt;发了应用后收到苹果的邮件，原来ipad需要76&lt;em&gt;76 和 152&lt;/em&gt;152的，iphone72&lt;em&gt;72搞定，如果想展示在itunes上。请使用512&lt;/em&gt;512的命名为iTunesArtwork的文件。注意这里没有png的后缀！&lt;/p&gt;
+
+&lt;h4&gt;3.页面跳转闪退&lt;/h4&gt;
+
+&lt;p&gt;在ios中的页面跳转时，最好将跳转目标页面的对象全局化，不然有一定的概率会出现段错（错误代码如下）。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;-(void)jumpToDrawView
+{
+        drawViewController *drawView = [[drawViewController alloc] init];
+        [self presentModalViewController:drawView animated:YES];
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4&gt;4.架构设计&lt;/h4&gt;
+
+&lt;p&gt;关于架构设计的一点总结：模块化，服务化，可重用化。不管是app的实现或者后台服务的实现，都应该遵守这几个原则。模块化指将基础的功能模块独立起来，比如把动画处理整成一个类，网络通信模块也独立成一个类，这样后面在做同样功能的开发才会很省力（做了两个app就发现，开发大多数时候都是在重复劳动，少给自己挖坑），服务化指后台提供的应该是一个标准协议的服务，比如http，比如使用json。使用自定义协议，那就是给自己挖了一个很深的坑；服务化后台实现上的体现则是，多个服务最好使用网络通信实现，比如两个模块有交互，采用http的方式比共享内存神马的靠谱很多，不然后期扩展的时候就等着跳坑里吧。可重用化是在模块化和服务化的基础上的一个目标，程序猿嘛，能偷懒就偷懒，苦逼兮兮的重复体力劳动不如腾出点时间多学点东西。&lt;/p&gt;
+
+&lt;h4&gt;5.静态库的那点事&lt;/h4&gt;
+
+&lt;p&gt;在xcode中创建一个静态库文件，编译后会生成两个版本，一个是模拟器版，一个是真机版。这样对后面引入静态库来开发非常不方便。因此非常需要打包成一个通用静态库方便调试。
+a.学习一个查看静态库文件信息的命令
+lipo -info xxxxxxxxxx.a
+显示结果中i386是mac上的架构（模拟器） armv6/armv7是ios架构的（真机）；&lt;/p&gt;
+
+&lt;p&gt;b.打包命令
+lipo -create &quot;完整路径/lib.a&quot; &quot;完整路径/lib.a&quot; -output &quot;输出路径/lib.a&quot; &lt;br/&gt;
+执行成功后，可使用查看命令查看。&lt;/p&gt;
+
+&lt;h4&gt;6.相册拍照的那些坑&lt;/h4&gt;
+
+&lt;p&gt;a.UIView的contentMode属性可以调整展示图的显示比例。默认为 UIViewContentModeScaleToFill 也就是缩放变形的效果，推荐使用UIViewContentModeScaleAspectFit&lt;/p&gt;
+
+&lt;p&gt;b.相机旋转的问题，这个问题需要在orient调整函数中调用  &lt;br/&gt;
+    if(UIDeviceOrientationIsLandscape([[UIDevice currentDevice]orientation]))
+    {&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        self.imagePickerController.cameraViewTransform = CGAffineTransformMakeRotation(M_PI/2);
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4&gt;7.编译的一些问题&lt;/h4&gt;
+
+&lt;p&gt;这个其实应该跟第五个坑写在一块，通常编译的静态库用c++实现的，如果还用了opencv，那编译的时候非常有可能会出现[ “list” file not found ] 这么一个奇葩的错误，这是由于在Xcode中，通常，Objective-c的后缀名位 .h/.m，C语言的后缀名为 .h/.c， C++的后缀名为.h/.cpp, 当一个文件中既有objective-c又有C++代码时，后缀名为 .h/.mm。在编写代码时要写对后缀名。其次，你可能发现，后缀名都写对了，代码也没有任何问题，编辑器也没有报错，为什么编译的时候就报错了呢？事实上，编译器和编辑器的工作是区分开来的，编辑器就是你写代码的地方，仅检查代码语法是否有错误，你语法没有错误当然不会报错了。编译器就是要编译运行在编辑器中编写好的代码，如果编辑器仅支持Objective-C，它怎么可能编译的了C++代码呢？&lt;/p&gt;
+
+&lt;p&gt;两个解决步骤:&lt;/p&gt;
+
+&lt;p&gt;a.将引用了静态库的源文件后缀改为.mm。通常情况下问题基本解决，如果还是不行。。&lt;/p&gt;
+
+&lt;p&gt;b.照下图找到选项“Compile Sources As”，意思是要把工程按照哪一种语言进行编译，默认是第一个“According to File Type”，将其改成Objective-C++即可。
+&lt;img src=&quot;/images/oc_compile.png&quot; alt=&quot;TARGETS-&amp;gt;Build Settings-&amp;gt;Apple LLVM compiler - Language&quot; /&gt;&lt;/p&gt;
+</content>
+   </entry>
+   
+   <entry>
+     <title>ios中的Touch消息响应</title>
+     <link href="http://www.linchaohui.cn/ios-responds"/>
+     <updated>2013-09-22T00:00:00+08:00</updated>
+     <id>http://www.linchaohui.cn/ios-responds</id>
+     <content type="html">&lt;h2&gt;ios中的Touch消息传递流程&lt;/h2&gt;
+
+&lt;p&gt;先来说说响应者对象（Responder Object），顾名思义，指的是有响应和处理事件能力的对象。响应者链就是由一系列的响应者对象构成的一个层次结构。&lt;/p&gt;
+
+&lt;p&gt;UIResponder是所有响应对象的基类，在UIResponder类中定义了处理上述各种事件的接口。我们熟悉的UIApplication、 UIViewController、UIWindow和所有继承自UIView的UIKit类都直接或间接的继承自UIResponder，所以它们的实例都是可以构成响应者链的响应者对象。&lt;/p&gt;
+
+&lt;h4&gt;响应者链有以下特点：&lt;/h4&gt;
+
+&lt;p&gt;1、响应者链通常是由视图（UIView）构成的；&lt;/p&gt;
+
+&lt;p&gt;2、一个视图的下一个响应者是它视图控制器（UIViewController）（如果有的话），然后再转给它的父视图（Super View）；&lt;/p&gt;
+
+&lt;p&gt;3、视图控制器（如果有的话）的下一个响应者为其管理的视图的父视图；&lt;/p&gt;
+
+&lt;p&gt;4、单例的窗口（UIWindow）的内容视图将指向窗口本身作为它的下一个响应者&lt;/p&gt;
+
+&lt;p&gt;需要指出的是，Cocoa Touch应用不像Cocoa应用，它只有一个UIWindow对象，因此整个响应者链要简单一点；&lt;/p&gt;
+
+&lt;p&gt;5、单例的应用（UIApplication）是一个响应者链的终点，它的下一个响应者指向nil，以结束整个循环。&lt;/p&gt;
+
+&lt;h2&gt;改写系统响应函数&lt;/h2&gt;
+
+&lt;p&gt;看过上面一大段的话，总结无非一句话：消息从父view调用api，确认消息再哪个子view中，然后子view调子子view的，子子孙孙无穷尽也，直到最后那个view没有自己的子view了。&lt;/p&gt;
+
+&lt;p&gt;所以其实我们只要改写调用的判断api 和响应api，这样所有的响应方式都可以定制了。
+判断api：
+    - (UIView&lt;em&gt;)hitTest:(CGPoint)point withEvent:(UIEvent &lt;/em&gt;)event
+    {
+    }&lt;/p&gt;
+
+&lt;p&gt;翻译一下，默认情况下，view会调用自己的hitTest:WithEvent，如果返回NO就game over，如果返回YES，就会调用自己的subView的hitTest:WithEvent，只要最后一个view 把自己返回，这样就由它处理这个消息了。看到这里,如果明白了的话，改写下这个函数已经能解决很多问题了。&lt;/p&gt;
+
+&lt;p&gt;当然，默认情况下，一个view是怎么判断这个消息该不该return YES呢。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
+{
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;虽然看函数名是根据这个消息是否在view的bound中发生来决定返回值，但事实上，有一些情况，比如你添加了一个UIView，然后这个UIView的下面有一个Button，虽然UIView在最上层，也会由UIButton响应这个点击，怎么解决这个问题呢，很简单，只要再子UIView中添加
+        - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
+        {
+        return YES;
+        }
+这样tap消息就能被这个UIView处理了&lt;/p&gt;
+</content>
+   </entry>
+   
+   <entry>
+     <title>ios中UINavigationController的使用</title>
+     <link href="http://www.linchaohui.cn/ios-UINavigationController"/>
+     <updated>2013-09-05T00:00:00+08:00</updated>
+     <id>http://www.linchaohui.cn/ios-UINavigationController</id>
+     <content type="html">&lt;h2&gt;一些误解&lt;/h2&gt;
+
+&lt;p&gt;今天封装了下淘宝的开放平台sdk，结果这货偷懒的紧，就一个view，人新浪的sdk注册页面大小都固定的死死的。所以考虑了下自己做个UINavigationController来修饰下淘宝的注册页面，平常自己写nib，页面跳转逻辑，一直觉得UINavigationController是个鸡肋，等实际要用的时候才发现，原来我还是too young too simple啊。&lt;/p&gt;
+
+&lt;h2&gt;UINavigationController不只是一个控制跳转的控制器&lt;/h2&gt;
+
+&lt;p&gt;UINavigationController其实很常用，之前做过一个“应用猎手”的app，里面的应用内购买就是基于此的，只不过这是系统实现的，所以还没有真正的理解，怎么才能实现那样的自己构造一个UINavigationController并自定义title，左右键呢？好吧，废话不多，讲下实现流程。&lt;/p&gt;
+
+&lt;h3&gt;创建并使用一个UINavigationController&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;UINavigationController *aNav = [[UINavigationController alloc] init];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;然后添加一个自定义的视图进去&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;UIViewController *aView = [[UIView alloc] initWithNibName: (*xib文件名*)];
+[aNav pushViewController:aView animated:NO];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;设置导航栏的左右按钮和标题&lt;/h3&gt;
+
+&lt;p&gt;这里其实有个坑：设置导航栏的按钮并不是去设置导航栏本身，而是当时被导航的视图控制器，比如我们对aView作设置，so&lt;/p&gt;
+
+&lt;p&gt;设置其标题：
+    aView.title = @&quot;标题&quot;;&lt;/p&gt;
+
+&lt;p&gt;设置按钮：
+    UIBarButtonItem *callModalViewButton = [[UIBarButtonItem alloc]
+                            initWithTitle:@&quot;点我&quot;
+                            style:UIBarButtonItemStyleBordered
+                            target:self
+                            action:@selector(callModalList)];
+    aView.navigationItem.leftBarButtonItem = callModalViewButton;
+    [callModalViewButton release];&lt;/p&gt;
+
+&lt;p&gt;其他常用方法和属性：
+    本地视图.navigationItem.leftBarButtonItem //左边栏项目
+    本地视图.navigationItem.rightBarButtonItem //右边栏项目
+    本地视图.navigationItem.backBarButtonItem //后退栏项目
+    本地视图.navigationItem.hidesBackButton //隐藏后退按钮（YES or NO）&lt;/p&gt;
+
+&lt;p&gt;that&#39;s all&lt;/p&gt;
+</content>
+   </entry>
+   
+ 
+</feed>

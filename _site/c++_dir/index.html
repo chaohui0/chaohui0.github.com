@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--
+    * Author:         BeiYuu
+    -->
+    <meta charset="utf-8" />
+    <title>c++遍历文件夹 | 林 | blog</title>
+    <meta name="author" content="LinChaohui" />
+    <meta name="description" content="LinChaohui's Blog" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="/css/default.css" type="text/css" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/atom.xml" />
+    <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+</head>
+<body>
+
+    <div class="home-menu">
+        <div class="home-icon-con">
+            <a class="home-menu-icon" href="/">LinChaohui</a>
+            <a class="home-follow" href="#" title="Contact Me">+</a>
+        </div>
+        <div class="home-contact" background-color:#212121>
+            <a href="http://weibo.com/linchaohui/" target="_blank" style="margin-left:-5px;"><img src="http://www.weibo.com/favicon.ico" alt="" width="25"/></a>
+            <a href="https://gist.github.com/chaohui0/" target="_blank" style="text-align:center;"><img src="https://www.github.com/favicon.ico" alt="" width="25"/></a>
+            <a href="mailto:chaohui0@gmail.com" target="_blank" style="text-align:right"><img src="https://mail.google.com/favicon.ico" alt="" width="25"/></a>
+        </div>
+    </div>
+
+    <div id="content">
+    <link rel="stylesheet" href="/js/prettify/prettify.css" />
+
+
+<div class="entry">
+    <h1 class="entry-title"><a href="/c%2B%2B_dir" title="c++遍历文件夹">c++遍历文件夹</a></h1>
+    <p class="entry-date">2013-10-31</p>
+    <p>bool readDir(char <em>path)//遍历文件夹
+{
+    cout&lt;&lt;"in readDir :"&lt;&lt;path&lt;&lt;endl;
+    struct dirent</em> ent = NULL;
+    DIR *pDir;
+    pDir=opendir(path);
+    if(!pDir)
+    {
+        printf("open dir error!\n");
+        return false;
+    }
+    while (NULL != (ent=readdir(pDir)))
+    {
+        if (ent->d_type == DT_DIR)    <br/>
+        {
+            if ( strcmp(ent->d_name, ".") &amp;&amp; strcmp(ent->d_name, "..") )
+            {
+                char imagePath[200]={0};
+                strcpy(imagePath,path);
+                strcat(imagePath,"/");
+                strcat(imagePath,ent->d_name);
+                if(!readDir(imagePath))
+                {
+                    printf("!!attention: readDir TO max size\n");
+                    return false;
+                }
+            }</p>
+
+<pre><code>    }
+    else if(strstr(ent-&gt;d_name,".jpg")&gt;0)
+    {
+
+        char imagePath[100];
+        memset(imagePath,0,100);
+
+        strcpy(imagePath,path);
+        strcat(imagePath,"/");
+        strcat(imagePath,ent-&gt;d_name);
+        string imageFile( ent-&gt;d_name);
+
+        //imageFileMap.insert(pair&lt;IMAGEID,string&gt;(++image_pt,imageFile));
+        printf("file name:%s , id:%lu, ent-&gt;d_reclen:%d   type:%d\n",ent-&gt;d_name,image_pt,ent-&gt;d_reclen,ent-&gt;d_type);
+
+    }
+}
+closedir(pDir); 
+return true;
+</code></pre>
+
+<p>}</p>
+
+</div>
+
+<div id="disqus_container">
+    <div style="margin-bottom:20px" class="right">
+        <script type="text/javascript" charset="utf-8">
+        (function(){
+          var _w = 86 , _h = 16;
+          var param = {
+            url:location.href,
+            type:'6',
+            count:'', /**是否显示分享数，1显示(可选)*/
+            appkey:'', /**您申请的应用appkey,显示分享来源(可选)*/
+            title:'', /**分享的文字内容(可选，默认为所在页面的title)*/
+            pic:'', /**分享图片的路径(可选)*/
+            ralateUid:'1865415451', /**关联用户的UID，分享微博会@该用户(可选)*/
+            language:'zh_cn', /**设置语言，zh_cn|zh_tw(可选)*/
+            rnd:new Date().valueOf()
+          }
+          var temp = [];
+          for( var p in param ){
+            temp.push(p + '=' + encodeURIComponent( param[p] || '' ) )
+          }
+          document.write('<iframe allowTransparency="true" frameborder="0" scrolling="no" src="http://hits.sinajs.cn/A1/weiboshare.html?' + temp.join('&') + '" width="'+ _w+'" height="'+_h+'"></iframe>')
+        })()
+        </script>
+    </div>
+    <a href="#" class="comment" onclick="return false;">点击查看评论</a>
+ 	<div id="disqus_thread"></div>
+
+
+</div>
+
+<!--<iframe width="100%" height="75" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=75&fansRow=2&ptype=1&speed=0&skin=5&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1855270953&verifier=375b89d6&dpc=1"></iframe>-->
+
+
+<script src="/js/post.js" type="text/javascript"></script>
+
+</div>
+
+
+    <!--*********************************************************-->
+    <!--****** 宝贝儿，看见这个时候，删掉下面的统计代码哦~ ******-->
+    <!--************* 再推荐下我的第一篇博客哦~~ ****************-->
+    <!--*********************************************************-->
+
+
+    <script type="text/javascript">
+        $(function(){
+            $('.home-follow').click(function(e){
+                e.preventDefault();
+
+                if($('.home-contact').is(':visible')){
+                    $('.home-contact').slideUp(100);
+                }else{
+                    $('.home-contact').slideDown(100);
+                }
+            });
+        })
+    </script>
+</body>
+</html>
+
+</body>
+</html>

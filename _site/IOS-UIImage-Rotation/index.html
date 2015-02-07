@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--
+    * Author:         BeiYuu
+    -->
+    <meta charset="utf-8" />
+    <title>UIImage的旋转问题 | 林 | blog</title>
+    <meta name="author" content="LinChaohui" />
+    <meta name="description" content="LinChaohui's Blog" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="/css/default.css" type="text/css" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/atom.xml" />
+    <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+</head>
+<body>
+
+    <div class="home-menu">
+        <div class="home-icon-con">
+            <a class="home-menu-icon" href="/">LinChaohui</a>
+            <a class="home-follow" href="#" title="Contact Me">+</a>
+        </div>
+        <div class="home-contact" background-color:#212121>
+            <a href="http://weibo.com/linchaohui/" target="_blank" style="margin-left:-5px;"><img src="http://www.weibo.com/favicon.ico" alt="" width="25"/></a>
+            <a href="https://gist.github.com/chaohui0/" target="_blank" style="text-align:center;"><img src="https://www.github.com/favicon.ico" alt="" width="25"/></a>
+            <a href="mailto:chaohui0@gmail.com" target="_blank" style="text-align:right"><img src="https://mail.google.com/favicon.ico" alt="" width="25"/></a>
+        </div>
+    </div>
+
+    <div id="content">
+    <link rel="stylesheet" href="/js/prettify/prettify.css" />
+
+
+<div class="entry">
+    <h1 class="entry-title"><a href="/IOS-UIImage-Rotation" title="UIImage的旋转问题">UIImage的旋转问题</a></h1>
+    <p class="entry-date">2013-10-23</p>
+    <h2>还是啰嗦下前言</h2>
+
+<p>在上上篇<a href="http://linchaohui.cn/ios-some-problems/">ios路上的一些坑</a>里讲了一点拍照的旋转问题。但是，这远远不能解决碰到的各种令人发指的旋转问题，特此另开一篇，深入的理解一下有关原理，记录关于旋转问题的一些解决方案。</p>
+
+<h2>imageOrientation的问题</h2>
+
+<p>用相机拍摄出来的照片含有EXIF信息，UIImage的imageOrientation属性指的就是EXIF中的orientation信息。
+如果我们忽略orientation信息，而直接对照片进行像素处理或者drawInRect等操作，得到的结果是翻转或者旋转90之后的样子。这是因为我们执行像素处理或者drawInRect等操作之后，imageOrientaion信息被删除了，imageOrientaion被重设为0，造成照片内容和imageOrientaion不匹配。
+所以，在对照片进行处理之前，先将照片旋转到正确的方向，并且返回的imageOrientaion为0。
+下面这个方法就是一个UIImage category中的方法，用它可以达到以上目的。</p>
+
+<pre><code>- (UIImage *)fixOrientation:(UIImage *)aImage {
+
+    // No-op if the orientation is already correct
+    if (aImage.imageOrientation == UIImageOrientationUp) 
+    return aImage;
+
+    // We need to calculate the proper transformation to make the image upright.
+    // We do it in 2 steps: Rotate if Left/Right/Down, and then flip if Mirrored.
+    CGAffineTransform transform = CGAffineTransformIdentity;
+
+    switch (aImage.imageOrientation) {
+    case UIImageOrientationDown:
+    case UIImageOrientationDownMirrored:
+        transform = CGAffineTransformTranslate(transform, aImage.size.width, aImage.size.height);
+        transform = CGAffineTransformRotate(transform, M_PI);
+        break;
+
+    case UIImageOrientationLeft:
+    case UIImageOrientationLeftMirrored:
+        transform = CGAffineTransformTranslate(transform, aImage.size.width, 0);
+        transform = CGAffineTransformRotate(transform, M_PI_2);
+        break;
+
+    case UIImageOrientationRight:
+    case UIImageOrientationRightMirrored:
+        transform = CGAffineTransformTranslate(transform, 0, aImage.size.height);
+        transform = CGAffineTransformRotate(transform, -M_PI_2);
+        break;
+    default:
+        break;
+    }
+
+    switch (aImage.imageOrientation) {
+    case UIImageOrientationUpMirrored:
+    case UIImageOrientationDownMirrored:
+        transform = CGAffineTransformTranslate(transform, aImage.size.width, 0);
+        transform = CGAffineTransformScale(transform, -1, 1);
+        break;
+
+    case UIImageOrientationLeftMirrored:
+    case UIImageOrientationRightMirrored:
+        transform = CGAffineTransformTranslate(transform, aImage.size.height, 0);
+        transform = CGAffineTransformScale(transform, -1, 1);
+        break;
+    default:
+        break;
+    }
+
+    // Now we draw the underlying CGImage into a new context, applying the transform
+    // calculated above.
+    CGContextRef ctx = CGBitmapContextCreate(NULL, aImage.size.width, aImage.size.height,
+                         CGImageGetBitsPerComponent(aImage.CGImage), 0,
+                         CGImageGetColorSpace(aImage.CGImage),
+                         CGImageGetBitmapInfo(aImage.CGImage));
+    CGContextConcatCTM(ctx, transform);
+    switch (aImage.imageOrientation) {
+    case UIImageOrientationLeft:
+    case UIImageOrientationLeftMirrored:
+    case UIImageOrientationRight:
+    case UIImageOrientationRightMirrored:
+        // Grr...
+        CGContextDrawImage(ctx, CGRectMake(0,0,aImage.size.height,aImage.size.width), aImage.CGImage);
+        break;
+
+    default:
+        CGContextDrawImage(ctx, CGRectMake(0,0,aImage.size.width,aImage.size.height), aImage.CGImage);
+        break;
+    }
+
+    // And now we just create a new UIImage from the drawing context
+    CGImageRef cgimg = CGBitmapContextCreateImage(ctx);
+    UIImage *img = [UIImage imageWithCGImage:cgimg];
+    CGContextRelease(ctx);
+    CGImageRelease(cgimg);
+    return img;
+}
+</code></pre>
+
+</div>
+
+<div id="disqus_container">
+    <div style="margin-bottom:20px" class="right">
+        <script type="text/javascript" charset="utf-8">
+        (function(){
+          var _w = 86 , _h = 16;
+          var param = {
+            url:location.href,
+            type:'6',
+            count:'', /**是否显示分享数，1显示(可选)*/
+            appkey:'', /**您申请的应用appkey,显示分享来源(可选)*/
+            title:'', /**分享的文字内容(可选，默认为所在页面的title)*/
+            pic:'', /**分享图片的路径(可选)*/
+            ralateUid:'1865415451', /**关联用户的UID，分享微博会@该用户(可选)*/
+            language:'zh_cn', /**设置语言，zh_cn|zh_tw(可选)*/
+            rnd:new Date().valueOf()
+          }
+          var temp = [];
+          for( var p in param ){
+            temp.push(p + '=' + encodeURIComponent( param[p] || '' ) )
+          }
+          document.write('<iframe allowTransparency="true" frameborder="0" scrolling="no" src="http://hits.sinajs.cn/A1/weiboshare.html?' + temp.join('&') + '" width="'+ _w+'" height="'+_h+'"></iframe>')
+        })()
+        </script>
+    </div>
+    <a href="#" class="comment" onclick="return false;">点击查看评论</a>
+ 	<div id="disqus_thread"></div>
+
+
+</div>
+
+<!--<iframe width="100%" height="75" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=75&fansRow=2&ptype=1&speed=0&skin=5&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1855270953&verifier=375b89d6&dpc=1"></iframe>-->
+
+
+<script src="/js/post.js" type="text/javascript"></script>
+
+</div>
+
+
+    <!--*********************************************************-->
+    <!--****** 宝贝儿，看见这个时候，删掉下面的统计代码哦~ ******-->
+    <!--************* 再推荐下我的第一篇博客哦~~ ****************-->
+    <!--*********************************************************-->
+
+
+    <script type="text/javascript">
+        $(function(){
+            $('.home-follow').click(function(e){
+                e.preventDefault();
+
+                if($('.home-contact').is(':visible')){
+                    $('.home-contact').slideUp(100);
+                }else{
+                    $('.home-contact').slideDown(100);
+                }
+            });
+        })
+    </script>
+</body>
+</html>
+
+</body>
+</html>
