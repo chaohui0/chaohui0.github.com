@@ -96,6 +96,7 @@ Jekyll只是个静态页面的发布系统，想做到关爽场倒是很容易�
 语法问题造成jekyll编译不通过导致的,检查下最新文章中是否使用了一些非法字符，或者本地编译调试，具体方法参考链接：[https://help.github.com/articles/using-jekyll-with-pages#troubleshooting](https://help.github.com/articles/using-jekyll-with-pages#troubleshooting)
 
 每次提交都要输入用户名密码很麻烦，在mac下git push的时候保存用户名密码：
+
 	git config --global credential.helper osxkeychain
 
 ##结语
