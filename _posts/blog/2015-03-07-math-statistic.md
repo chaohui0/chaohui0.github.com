@@ -4,8 +4,6 @@ title: 概率论与数理统计
 description: 新系列(一)
 category: blog
 ---
-$$x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$$
-\\(x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}\\)
 复习了下概率论与数理统计，整理了个笔记
 
 大数定律：当样本->+∞，则频率≈概率
@@ -20,9 +18,9 @@ $$x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$$
 
 然后常见的分布：
 
-卡方分布：X1~Xn都是独立同分布的正态分布，则n个随机变量的平方和的分布叫自由度为n的卡方分布
+卡方分布：\\(X_1~X_n\\)都是独立同分布的正态分布，则n个随机变量的平方和的分布叫自由度为n的卡方分布
 
-t分布：x~N(0,1), Y~卡方分布(n),t=x/(Y/n)^0.5
+t分布：x~N(0,1), Y~卡方分布(n),\\(t=\frac{x}{(Y/n)^0.5}\\)
 
 F分布：x~卡方分布(n),y~卡方分布(m), F=(x/n)/(y/m)
 
@@ -40,7 +38,7 @@ F分布：x~卡方分布(n),y~卡方分布(m), F=(x/n)/(y/m)
 （1）证明样本均值是总体期望的无偏估计    
 （2）证明样本修正方差\\(1/(n-1)\sum{（x-E(x))^2}\\) 为总体方差的无偏估计   
 
-第一个证明似乎靠直觉一秒就判定为对的，那就直接跳过吧，第二个为什么是1/(n-1),拿起纸笔推导一下吧,[一个答案链接](http://zhidao.baidu.com/link?url=MdP8GRV56vQefayMWhqF364G_YpkwS9YSBkCci-xhgKF3YmASIebMTyGD8BjcLRRnq228Lsde49yrm5AhFdQALDQcNbz4_cFDqloFytLgHS),其中var(x)=E(x^2)-E(x)^2和自由度的概念是关键点,当平均数的值和其中n-1个数据的值已知时，另一个数据的值就不能自由变化了，因此样本方差无偏估计的自由度为n-1。
+第一个证明似乎靠直觉一秒就判定为对的，那就直接跳过吧，第二个为什么是1/(n-1),拿起纸笔推导一下吧,[一个答案链接](http://zhidao.baidu.com/link?url=MdP8GRV56vQefayMWhqF364G_YpkwS9YSBkCci-xhgKF3YmASIebMTyGD8BjcLRRnq228Lsde49yrm5AhFdQALDQcNbz4_cFDqloFytLgHS),其中\\(var(x)=E(x^2)-E(x)^2\\)和自由度的概念是关键点,当平均数的值和其中n-1个数据的值已知时，另一个数据的值就不能自由变化了，因此样本方差无偏估计的自由度为n-1。
 
 
 
