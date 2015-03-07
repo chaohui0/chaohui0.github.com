@@ -95,6 +95,9 @@ Jekyll只是个静态页面的发布系统，想做到关爽场倒是很容易�
 在具体使用的时候，可能会发生更新了日志，但是网页却没有更新的情况，这个一般是由于
 语法问题造成jekyll编译不通过导致的,检查下最新文章中是否使用了一些非法字符，或者本地编译调试，具体方法参考链接：[https://help.github.com/articles/using-jekyll-with-pages#troubleshooting](https://help.github.com/articles/using-jekyll-with-pages#troubleshooting)
 
+每次提交都要输入用户名密码很麻烦，在mac下git push的时候保存用户名密码：
+	git config --global credential.helper osxkeychain
+
 ##结语
 
 用vim写博客真的很有feel有木有，还有很多nb的诸如octopress的开源工具，大家有兴趣也可以研究下，本博首篇博文完结，我要git push啦，有任何问题请留言哦。
