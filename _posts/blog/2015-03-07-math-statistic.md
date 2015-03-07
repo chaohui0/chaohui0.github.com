@@ -4,7 +4,8 @@ title: 概率论与数理统计
 description: 新系列(一)
 category: blog
 ---
-
+$$x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$$
+\\(x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}\\)
 复习了下概率论与数理统计，整理了个笔记
 
 大数定律：当样本->+∞，则频率≈概率
