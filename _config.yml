@@ -4,6 +4,8 @@ markdown: rdiscount
 pygments: true
 paginate: 8
 permalink: /:title
+input: GFM
+markdown: kramdown
 
 title: 林 | blog
 url: http://www.linchaohui.cn
