@@ -102,7 +102,7 @@ Jekyll只是个静态页面的发布系统，想做到关爽场倒是很容易�
 插入数学公式请参考[链接](http://blog.csdn.net/xiahouzuoxin/article/details/26478179)和[一些语法](http://ttang.name/2014/05/04/markdown-and-mathjax/)
 ##结语
 
-用vim写博客真的很有feel有木有，还有很多nb的诸如octopress的开源工具，大家有兴趣也可以研究下，本博首篇博文完结，我要git push啦，有任何问题请留言哦。
+用vim写博客真的很有feel有木有，还有很多nb的诸如octopress的开源工具，大家有兴趣也可以研究下，本博首篇博文完结，有任何问题请留言。
 
 
 [Github]:   http://github.com "Github"
