@@ -108,7 +108,6 @@ Jekyll只是个静态页面的发布系统，想做到关爽场倒是很容易�
 [Github]:   http://github.com "Github"
 [Github Pages]: http://pages.github.com/ "Github Pages"
 [Jekyll]:   https://github.com/mojombo/jekyll "Jekyll"
-[我的blog]:  "我的blog"
 [配置ssh keys]: http://www.google.com.hk/#bav=on.2,or.&fp=7b10337b43d4ef46&newwindow=1&q=github+ssh+key&safe=strict "配置ssh keys"
 [Disqus]: http://disqus.com/
 [多说]: http://duoshuo.com/
