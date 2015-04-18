@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 快思慢想
-category: thinking
+category: secret
 description: 你之所以痛苦是因为想的太多而书读的太少 -- 杨绛
 ---
 
