@@ -2,7 +2,7 @@
 layout: post
 title: 走向Geek第一步，使用GitHub搭建blog
 description: 使用GitHub是Geek必备的基本素质
-category: blog
+
 ---
 
 ##一点废话
