@@ -30,4 +30,5 @@ ok，拖了几个月继续填坑。上面已经介绍了马尔科夫链具有稳
 
 Hastings-Metropolis算法就是一个基本的MCMC方法。
 
+
 [LinChaohui]:    http://www.linchaohui.com  "LinChaohui"
