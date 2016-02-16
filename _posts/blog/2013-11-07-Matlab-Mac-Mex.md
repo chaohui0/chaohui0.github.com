@@ -21,7 +21,7 @@ mbuild -setup 重安装mbuild
 mex -setup 重安装mex
 
 
-###后台运行matlab
+### 后台运行matlab
 
 在服务器上跑个程序跑了一天了，结果早上把电脑电源踢了。。我勒个去，还是要用后台启动的方式啊
 

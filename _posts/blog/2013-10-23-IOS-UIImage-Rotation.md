@@ -5,11 +5,11 @@ description: 本来打算放在“坑”的集合里的，想想还是有些内�
 category: blog
 ---
 
-##还是啰嗦下前言
+## 还是啰嗦下前言
 
 在上上篇[ios路上的一些坑][]里讲了一点拍照的旋转问题。但是，这远远不能解决碰到的各种令人发指的旋转问题，特此另开一篇，深入的理解一下有关原理，记录关于旋转问题的一些解决方案。
 
-##imageOrientation的问题
+## imageOrientation的问题
 
 用相机拍摄出来的照片含有EXIF信息，UIImage的imageOrientation属性指的就是EXIF中的orientation信息。
 如果我们忽略orientation信息，而直接对照片进行像素处理或者drawInRect等操作，得到的结果是翻转或者旋转90之后的样子。这是因为我们执行像素处理或者drawInRect等操作之后，imageOrientaion信息被删除了，imageOrientaion被重设为0，造成照片内容和imageOrientaion不匹配。

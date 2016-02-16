@@ -5,12 +5,13 @@ description: 理解消息传递流程，改写系统调用函数
 category: blog
 ---
 
-##ios中的Touch消息传递流程
+## ios中的Touch消息传递流程
 
 先来说说响应者对象（Responder Object），顾名思义，指的是有响应和处理事件能力的对象。响应者链就是由一系列的响应者对象构成的一个层次结构。
 
 UIResponder是所有响应对象的基类，在UIResponder类中定义了处理上述各种事件的接口。我们熟悉的UIApplication、 UIViewController、UIWindow和所有继承自UIView的UIKit类都直接或间接的继承自UIResponder，所以它们的实例都是可以构成响应者链的响应者对象。
-####响应者链有以下特点：
+
+#### 响应者链有以下特点：
 
 1、响应者链通常是由视图（UIView）构成的；
 
@@ -25,7 +26,7 @@ UIResponder是所有响应对象的基类，在UIResponder类中定义了处理�
 5、单例的应用（UIApplication）是一个响应者链的终点，它的下一个响应者指向nil，以结束整个循环。
 
 
-##改写系统响应函数
+## 改写系统响应函数
 
 看过上面一大段的话，总结无非一句话：消息从父view调用api，确认消息再哪个子view中，然后子view调子子view的，子子孙孙无穷尽也，直到最后那个view没有自己的子view了。
 
