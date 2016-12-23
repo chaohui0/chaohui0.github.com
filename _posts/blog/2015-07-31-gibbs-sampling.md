@@ -28,7 +28,7 @@ category: blog
 
 ok，拖了几个月继续填坑。上面已经介绍了马尔科夫链具有稳态这种特性，所以当其达到平稳分布后，同时稳态的分布也是我们给定的分布，对其抽样就能生成符合我们想要分布的随机模拟数据了。所以MCMC的核心是：生成我们想要的分布的随机模拟数据。有什么用？开玩笑，很多贝叶斯估计的后验分布都是一些复杂积分，牛顿莱布尼兹根本搞不定，有了MCMC，贝叶斯方法才彻底牛逼起来了有木有。可以看下[这篇博客](http://www.cnblogs.com/xbinworld/p/4266146.html?utm_source=tuicool&utm_medium=referral)的蒙特卡洛数值积分方法。
 
-Hastings-Metropolis算法就是一个基本的MCMC方法。
+Hastings-Metropolis算法就是一个基本的MCMC方法。MCMC采样有什么用，其实就是为了通过采样计算复杂分布p(x)的积分值，因此需要知道接受-拒绝抽样和重要性抽样等方法，而MCMC的出发点就是构造一个平稳分布恰好是p(x)。
 
 
 [LinChaohui]:    http://www.linchaohui.com  "LinChaohui"
