@@ -10,4 +10,4 @@ category: blog
 
 
 
-[LinChaohui]:    http://www.linchaohui.com  "LinChaohui"
+[LinChaohui]:    http://www.linchaohui.cn  "LinChaohui"

@@ -31,4 +31,4 @@ ok，拖了几个月继续填坑。上面已经介绍了马尔科夫链具有稳
 Hastings-Metropolis算法就是一个基本的MCMC方法。MCMC采样有什么用，其实就是为了通过采样计算复杂分布p(x)的积分值，因此需要知道接受-拒绝抽样和重要性抽样等方法，而MCMC的出发点就是构造一个平稳分布恰好是复杂分布p(x)。
 
 
-[LinChaohui]:    http://www.linchaohui.com  "LinChaohui"
+[LinChaohui]:    http://www.linchaohui.cn  "LinChaohui"
