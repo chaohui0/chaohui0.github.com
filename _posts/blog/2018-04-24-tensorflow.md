@@ -7,7 +7,7 @@ category: blog
 ## kaldi与Tensorflow模型
 kaldi的sigmoid节点计算公式为: W * X + b
 
-Tensorflow的模型计算公式为：  X * W + b
+而在Tensorflow的代码里，习惯用模型计算公式为：  X * W + b （Wx_plus_b = tf.matmul(inputs, w) + b）
 
 tf模型做奇异值分解推导：
 
