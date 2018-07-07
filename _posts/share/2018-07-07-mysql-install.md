@@ -23,6 +23,8 @@ rpm -ivh mysql-community-release-el7-5.noarch.rpm
 
 yum install mysql-community-server
 
-service mysql start
+mysqld --initialize
+
+systemctl start mysqld
 
 cp /usr/sbin/mysqld /etc/init.d/
